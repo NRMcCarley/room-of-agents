@@ -30,8 +30,18 @@ class Factory:
         self.agent_2.add_message(role="user", text=self.instructions_2)
         print(f"TO AGENT 2:\n{self.instructions_2}\n")
         # Start talking
-        for _ in range(num_messages):
-            self.talk()
+        for idx in range(num_messages):
+            if idx//10 == 9:
+                msg_str_1 = self.instructions_general
+                print(f"AGENT 1:\n{msg_str_1}\n")
+                self.agent_1.add_message(role="assistant", text=msg_str_1)
+                self.agent_2.add_message(role="user", text=msg_str_1)
+                msg_str_2 = self.agent_2.respond()
+                print(f"AGENT 2: {msg_str_2}\n")
+                self.agent_2.add_message(role="assistant", text=msg_str_2)
+                self.agent_1.add_message(role="user", text=msg_str_2)
+            else:
+                self.talk()
 
     def talk(self):
         msg_str_1 = self.agent_1.respond()
@@ -69,7 +79,7 @@ class Agent(Factory):
         payload = {
             "model": "gpt-4o",
             "messages": self.message_history,
-            "temperature": 0.1,
+            "temperature": 0.08,
             "max_tokens": 4096
         }
         # Send the request to the API
