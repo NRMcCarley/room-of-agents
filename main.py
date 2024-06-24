@@ -45,9 +45,25 @@ def main():
         f"are to respond to the message, after which Agent 1 will respond to what you say. This will repeat. The message "
         f"that follows this will be Agent 1's message."
     )
+    instructions_manager = (
+        f"You will be the manager. We will have Agent 1 speak, then Agent 2 speak, then repeat this until this have sent all "
+        f"of their messages for this cycle. You are to analyze their work and create/update the running body of work that "
+        f"is the answer to the task outlined in the first message - the marketing plan. Your job is to keep them on task "
+        f"and get them to keep generating new ideas and refining their current ideas."
+    )
+    next_cycle_prompt = (
+        f"Respond to this message with the revised system instructions (the original system instructions being the very first "
+        f"message in this conversation)."
+    )
     # Set up Factory
-    factory = Factory(instructions_general=instructions_general, instructions_1=instructions_1, instructions_2=instructions_2)
-    factory.observe_agent_conversation(num_messages=100)
+    factory = Factory(
+        instructions_general=instructions_general, 
+        instructions_1=instructions_1, 
+        instructions_2=instructions_2, 
+        instructions_manager=instructions_manager,
+        next_cycle_prompt=next_cycle_prompt
+    )
+    factory.observe_agent_conversation(num_messages=5, num_cycles=10)
 
 
 if __name__ == "__main__":
